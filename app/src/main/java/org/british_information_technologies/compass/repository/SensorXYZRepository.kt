@@ -8,6 +8,7 @@ import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.british_information_technologies.compass.signal.lowPassVectorFilter
 import kotlin.math.round
 
 abstract class SensorXYZRepository constructor(
@@ -19,7 +20,7 @@ abstract class SensorXYZRepository constructor(
 
 	private val _vector = MutableStateFlow(listOf(0.0f,0.0f,0.0f))
 
-	var vector = _vector
+	var vector = _vector.lowPassVectorFilter()
 
 	var x = _vector.map { it[0] }
 	var y = _vector.map { it[1] }
@@ -30,8 +31,8 @@ abstract class SensorXYZRepository constructor(
 		sensorManager.registerListener(
 			this,
 			sensor,
-			SensorManager.SENSOR_DELAY_UI,
-			SensorManager.SENSOR_DELAY_NORMAL
+			SensorManager.SENSOR_DELAY_GAME,
+			SensorManager.SENSOR_DELAY_GAME
 		)
 	}
 
